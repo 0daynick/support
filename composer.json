@@ -1,0 +1,24 @@
+{
+    "name": "overnic/support",
+    "description": "A simple laravel support",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "overnick",
+            "email": "overnic@httpd.cc"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "ramsey/uuid": "^3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "OverNick\\Support\\": ""
+        },
+        "files": [
+            "functions.php"
+        ]
+    }
+}
