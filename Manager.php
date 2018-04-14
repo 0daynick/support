@@ -13,6 +13,11 @@ abstract class Manager
     protected $app;
 
     /**
+     * @var array
+     */
+    protected $config;
+
+    /**
      * The registered custom driver creators.
      *
      * @var array
@@ -30,10 +35,11 @@ abstract class Manager
      * Create a new manager instance.
      *
      * @param  $app
-     * @return void
+     * @param array $config
      */
-    public function __construct($app)
+    public function __construct(array $config = [], $app = null)
     {
+        $this->config = $config;
         $this->app = $app;
     }
 
