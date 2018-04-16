@@ -15,7 +15,7 @@ abstract class Manager
     /**
      * @var array
      */
-    protected $config;
+    protected $configure;
 
     /**
      * The registered custom driver creators.
@@ -39,7 +39,7 @@ abstract class Manager
      */
     public function __construct(array $config = [], $app = null)
     {
-        $this->config = $config;
+        $this->configure = $config;
         $this->app = $app;
     }
 
