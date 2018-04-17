@@ -54,7 +54,20 @@ abstract class Manager
     {
         return Arr::get($this->configure, $key, $default);
     }
-    
+
+    /**
+     * 设置配置文件
+     *
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function setConfigure($key, $value)
+    {
+        Arr::set($this->configure, $key, $value);
+        return $this;
+    }
+
     /**
      * Get the default driver name.
      *
