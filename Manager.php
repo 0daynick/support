@@ -44,6 +44,18 @@ abstract class Manager
     }
 
     /**
+     * 获取配置文件
+     *
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     */
+    public function getConfigure($key = null, $default = null)
+    {
+        return Arr::get($this->configure, $key, $default);
+    }
+    
+    /**
      * Get the default driver name.
      *
      * @return string
