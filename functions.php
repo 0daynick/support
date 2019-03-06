@@ -92,3 +92,18 @@ if (! function_exists('get_server_ip')) {
         return filter_var($ip, FILTER_VALIDATE_IP) ?: '127.0.0.1';
     }
 }
+
+if (!function_exists('ipdetection')) {
+    /**
+     * 内网ip检测
+     *
+     * @param $ip
+     * @return false|int
+     */
+    function ipdetection($ip)
+    {
+        $preg = '/^(127\.0\.0\.1|0\.0\.0\.0|255\.255\.255\.255|224\.0\.0\.1|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|172\.16\.\d{1,3}\.\d{1,3}|172.31\.\d{1,3}\.\d{1,3})$/';
+
+        return preg_match($preg, $ip);
+    }
+}
