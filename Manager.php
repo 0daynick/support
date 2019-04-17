@@ -1,11 +1,15 @@
 <?php
-
 namespace OverNick\Support;
 
+use ArrayAccess;
 use Closure;
 use InvalidArgumentException;
 
-abstract class Manager
+/**
+ * Class Manager
+ * @package OverNick\Support
+ */
+abstract class Manager implements ArrayAccess
 {
     /**
      * The application instance.
@@ -32,15 +36,22 @@ abstract class Manager
     protected $drivers = [];
 
     /**
+     * @var string
+     */
+    protected $driver;
+
+    /**
      * Create a new manager instance.
      *
      * @param  $app
      * @param array $config
+     * @param string $driver
      */
-    public function __construct(array $config = [], $app = null)
+    public function __construct(array $config = [], $app = null, $driver = null)
     {
         $this->configure = $config;
         $this->app = $app;
+        $this->driver = $driver;
     }
 
     /**
@@ -73,18 +84,29 @@ abstract class Manager
      *
      * @return string
      */
-    abstract public function getDefaultDriver();
+    public function getDefaultDriver()
+    {
+        return $this->driver ?? $this->getConfigure('default');
+    }
+
+    /**
+     * @param $driver
+     * @return $this
+     */
+    public function setDefaultDriver($driver = null)
+    {
+        $this->driver = $driver;
+        return $this;
+    }
 
     /**
      * Get a driver instance.
      *
      * @param  string  $driver
-     * @return mixed
+     * @return $this
      */
     public function driver($driver = null)
     {
-        $driver = $driver ?: $this->getDefaultDriver();
-
         if (is_null($driver)) {
             throw new InvalidArgumentException(sprintf(
                 'Unable to resolve NULL driver for [%s].', static::class
@@ -170,6 +192,50 @@ abstract class Manager
      */
     public function __call($method, $parameters)
     {
-        return $this->driver()->$method(...$parameters);
+        return $this->driver($this->getDefaultDriver())->$method(...$parameters);
     }
+
+    /**
+     * call the default driver instance.
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->driver($this->getDefaultDriver())->$name;
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->extend($offset, $value);
+    }
+
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->getDrivers());
+    }
+
+    /**
+     * @param mixed $offset
+     * @return mixed|Manager
+     */
+    public function offsetGet($offset)
+    {
+        return $this->driver($offset);
+    }
+
+    public function offsetUnset($offset)
+    {
+        // TODO: Implement offsetUnset() method.
+    }
+
 }
